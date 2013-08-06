@@ -16,7 +16,8 @@ A PowerShell utility module with some sweet, syntactic goodness.
 
 `sugar.ps` provides the following handy functions (in the style of prefix operators):
 
-* `?:`  invoke ternary (shorthand if-then-else)
+* `?:` invoke ternary (shorthand if-then-else)
+* `??` null coalesce
 * `~>` copy files
 * `=>` copy files and directory structure
 

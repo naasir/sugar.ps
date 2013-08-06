@@ -5,6 +5,7 @@
 Set-Alias ~> Copy-Files
 Set-Alias => Copy-FilesAndStructure
 Set-Alias ?: Invoke-Ternary
+Set-Alias ?? Coalesce
 
 # -- PUBLIC ---------------------------------------
 
@@ -25,6 +26,10 @@ function Invoke-Ternary([scriptblock]$decider, [scriptblock]$ifTrue, [scriptbloc
       &$ifFalse 
    }
 }
+
+# coalesce function:
+# borrowed from: http://stackoverflow.com/questions/10623907/null-coalescing-in-powershell
+function Coalesce($a, $b) { if ($a -ne $null) { $a } else { $b } }
 
 # -- PRIVATE --------------------------------------
 
@@ -90,4 +95,4 @@ function test-isDirectoryPattern($pattern) {
 }
 
 # -- EXPORT --------------------------------------
-Export-ModuleMember -function Copy-Files, Copy-FilesAndStructure, Invoke-Ternary -alias ~>, =>, ?:
+Export-ModuleMember -function Copy-Files, Copy-FilesAndStructure, Invoke-Ternary, Coalesce -alias ~>, =>, ?:, ??
