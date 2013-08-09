@@ -2,12 +2,19 @@
 
 # -- ALIASES --------------------------------------
 
-Set-Alias ~> Copy-Files
-Set-Alias => Copy-FilesAndStructure
-Set-Alias ?: Invoke-Ternary
-Set-Alias ?? Coalesce
+Set-Alias .<  Read-EntireFile
+Set-Alias ~>  Copy-Files
+Set-Alias =>  Copy-FilesAndStructure
+Set-Alias .// Replace-InFile
+Set-Alias =// Replace-InFiles
+Set-Alias ?:  Invoke-Ternary
+Set-Alias ??  Coalesce
 
 # -- PUBLIC ---------------------------------------
+
+function Read-EntireFile([string]$src) {
+    return [string]::Join("`n", (Get-Content -Raw $src))
+}
 
 function Copy-Files([string]$srcPattern, [string]$destPattern) {
     return copy-filesFromPattern $srcPattern $destPattern
@@ -15,6 +22,25 @@ function Copy-Files([string]$srcPattern, [string]$destPattern) {
 
 function Copy-FilesAndStructure([string]$srcPattern, [string]$destPattern) {
     return copy-filesFromPattern $srcPattern $destPattern -preserveStructure
+}
+
+function Replace-InFile([string]$file, [string]$pattern, [string]$replacement) {
+    Replace-InFiles @{$file=$file} @{$pattern=$replacement}
+}
+
+function Replace-InFiles([hashtable]$files, [hashtable]$replacements) {
+
+    foreach($source in $files.Keys) {
+        $text = .< $files[$source]
+
+        foreach($pattern in $replacements.Keys) {
+            $replacement = $replacements[$pattern]
+            $text = [regex]::Replace($text, $pattern, $replacement, "singleline")
+        }
+
+        $destination = $files[$source]
+        set-content -path $destination -value "$text" -force 
+    }
 }
 
 # shorthand if-then-else function
@@ -95,4 +121,6 @@ function test-isDirectoryPattern($pattern) {
 }
 
 # -- EXPORT --------------------------------------
-Export-ModuleMember -function Copy-Files, Copy-FilesAndStructure, Invoke-Ternary, Coalesce -alias ~>, =>, ?:, ??
+Export-ModuleMember `
+    -function Read-EntireFile, Copy-Files, Copy-FilesAndStructure, Replace-InFile, ReplaceInFiles, Invoke-Ternary, Coalesce `
+    -alias .<, ~>, =>, .//, =//, ?:, ??
