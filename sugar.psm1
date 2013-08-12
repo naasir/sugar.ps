@@ -122,5 +122,5 @@ function test-isDirectoryPattern($pattern) {
 
 # -- EXPORT --------------------------------------
 Export-ModuleMember `
-    -function Read-EntireFile, Copy-Files, Copy-FilesAndStructure, Replace-InFile, ReplaceInFiles, Invoke-Ternary, Coalesce `
+    -function Read-EntireFile, Copy-Files, Copy-FilesAndStructure, Replace-InFile, Replace-InFiles, Invoke-Ternary, Coalesce `
     -alias .<, ~>, =>, .//, =//, ?:, ??
